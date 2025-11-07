@@ -3,10 +3,10 @@
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-// import { Button } from "@/components/ui/button" // Commented out as we are replacing it with native button
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card" // Commented out as we are replacing it with native div
-// import { Input } from "@/components/ui/input" // Commented out as we are replacing it with native input
-// import { Label } from "@/components/ui/label" // Commented out as we are replacing it with native label
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -68,15 +68,18 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-4 md:p-10">
       <div className="w-full max-w-sm">
-        <div className="rounded border bg-white p-6 shadow">
-          <div className="mb-4">
-            <h2 className="text-2xl font-semibold">{isSignUp ? "Create Account" : "Welcome Back"}</h2>
-            <p className="text-sm text-muted-foreground">{isSignUp ? "Create a new account to get started" : "Sign in to your account"}</p>
-          </div>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">{isSignUp ? "Create Account" : "Welcome Back"}</CardTitle>
+            <CardDescription>
+              {isSignUp ? "Create a new account to get started" : "Sign in to your account"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="grid gap-2">
-                <label htmlFor="email" className="text-sm font-medium">Email</label>
-                <input
+                <Label htmlFor="email">Email</Label>
+                <Input
                   id="email"
                   type="email"
                   placeholder="m@example.com"
@@ -84,43 +87,36 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                   disabled={isLoading}
-                  className="w-full rounded border px-3 py-2"
                 />
               </div>
               <div className="grid gap-2">
-                <label htmlFor="password" className="text-sm font-medium">Password</label>
-                <input
+                <Label htmlFor="password">Password</Label>
+                <Input
                   id="password"
                   type="password"
                   required
                   value={password}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                   disabled={isLoading}
-                  className="w-full rounded border px-3 py-2"
                 />
               </div>
               {isSignUp && (
                 <div className="grid gap-2">
-                  <label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</label>
-                  <input
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input
                     id="confirmPassword"
                     type="password"
                     required
                     value={confirmPassword}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
                     disabled={isLoading}
-                    className="w-full rounded border px-3 py-2"
                   />
                 </div>
               )}
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <button
-                type="submit"
-                className="w-full rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (isSignUp ? "Creating account..." : "Signing in...") : isSignUp ? "Sign Up" : "Sign In"}
-              </button>
+              </Button>
               <div className="text-center text-sm">
                 {isSignUp ? (
                   <>
@@ -147,7 +143,8 @@ export default function LoginPage() {
                 )}
               </div>
             </form>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
