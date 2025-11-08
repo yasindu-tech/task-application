@@ -2,6 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { createPortal } from "react-dom"
+import { ProviderUsageError } from "@/lib/exceptions"
 
 type ToastType = "success" | "error" | "info" | "neutral"
 
@@ -50,7 +51,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
 export function useToast() {
   const ctx = useContext(ToastContext)
-  if (!ctx) throw new Error("useToast must be used within ToastProvider")
+  if (!ctx) throw new ProviderUsageError("useToast must be used within ToastProvider")
   return ctx
 }
 

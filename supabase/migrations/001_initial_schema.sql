@@ -1,3 +1,7 @@
+-- Migration: 001_initial_schema.sql
+-- Purpose: Create the `tasks` table and associated Row Level Security policies
+-- Source: /supabase/initial_schema.sql
+
 -- Create the tasks table with user_id foreign key to auth.users
 CREATE TABLE IF NOT EXISTS public.tasks (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
