@@ -42,31 +42,37 @@ export default async function TasksPage() {
 
         <div className="space-y-6">
           {/* Dashboard summary cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Total tasks</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-semibold">{taskList.length}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-stretch">
+            <Card className="h-20 flex flex-col justify-center">
+              <CardContent className="flex items-center justify-between px-4">
+                <div>
+                  <p className="text-sm text-neutral-500">Total tasks</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold">{taskList.length}</p>
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Completed</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-semibold">{taskList.filter((t) => t.completed).length}</p>
+            <Card className="h-20 flex flex-col justify-center">
+              <CardContent className="flex items-center justify-between px-4">
+                <div>
+                  <p className="text-sm text-neutral-500">Completed</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold">{taskList.filter((t) => t.completed).length}</p>
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Remaining</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-semibold">{taskList.filter((t) => !t.completed).length}</p>
+            <Card className="h-20 flex flex-col justify-center">
+              <CardContent className="flex items-center justify-between px-4">
+                <div>
+                  <p className="text-sm text-neutral-500">Remaining</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold">{taskList.filter((t) => !t.completed).length}</p>
+                </div>
               </CardContent>
             </Card>
           </div>
