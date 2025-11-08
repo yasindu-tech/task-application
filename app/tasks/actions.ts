@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { UnauthorizedError, TaskCompletedError } from "@/lib/exceptions"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
@@ -15,7 +16,7 @@ export async function createTask(title: string) {
 
     const { data: userData, error: userError } = await supabase.auth.getUser()
     if (userError || !userData?.user) {
-      throw new Error("Unauthorized")
+      throw new UnauthorizedError()
     }
 
     const { error } = await supabase.from("tasks").insert({
@@ -39,7 +40,7 @@ export async function toggleTask(taskId: string, completed: boolean) {
 
     const { data: userData, error: userError } = await supabase.auth.getUser()
     if (userError || !userData?.user) {
-      throw new Error("Unauthorized")
+      throw new UnauthorizedError()
     }
 
     const { error } = await supabase
@@ -63,7 +64,7 @@ export async function deleteTask(taskId: string) {
 
     const { data: userData, error: userError } = await supabase.auth.getUser()
     if (userError || !userData?.user) {
-      throw new Error("Unauthorized")
+      throw new UnauthorizedError()
     }
 
     const { error } = await supabase.from("tasks").delete().eq("id", taskId).eq("user_id", userData.user.id)
@@ -84,7 +85,7 @@ export async function updateTask(taskId: string, title: string) {
 
     const { data: userData, error: userError } = await supabase.auth.getUser()
     if (userError || !userData?.user) {
-      throw new Error("Unauthorized")
+      throw new UnauthorizedError()
     }
 
     // Ensure the task belongs to the user and is not completed before updating
@@ -97,7 +98,7 @@ export async function updateTask(taskId: string, title: string) {
 
     if (fetchError) throw fetchError
     if (existingTask?.completed) {
-      throw new Error("Cannot update a completed task")
+      throw new TaskCompletedError()
     }
 
     const { error } = await supabase

@@ -1,0 +1,7 @@
+{
+  "name": "Task App",
+  "version": "0.1.0",
+  "description": "Static meta for Task App — served from public/meta.json",
+  "routes": ["/", "/tasks", "/login"],
+  "generatedAt": "2025-11-08T00:00:00Z"
+}
