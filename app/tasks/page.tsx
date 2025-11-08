@@ -4,6 +4,7 @@ import type { Task } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TaskItem } from "@/components/TaskItem"
+import TaskList from "@/components/TaskList"
 import { CreateTaskForm } from "@/components/CreateTaskForm"
 
 export default async function TasksPage() {
@@ -18,6 +19,8 @@ export default async function TasksPage() {
     .from("tasks")
     .select("*")
     .eq("user_id", userData.user.id)
+    // order by completion status first (incomplete/false first), then newest first
+    .order("completed", { ascending: true })
     .order("created_at", { ascending: false })
 
   if (tasksError) {
@@ -48,11 +51,7 @@ export default async function TasksPage() {
               {taskList.length === 0 ? (
                 <p className="text-center text-neutral-600">No tasks yet. Create one to get started!</p>
               ) : (
-                <div className="space-y-3">
-                  {taskList.map((task) => (
-                    <TaskItem key={task.id} task={task} />
-                  ))}
-                </div>
+                <TaskList tasks={taskList} />
               )}
             </CardContent>
           </Card>

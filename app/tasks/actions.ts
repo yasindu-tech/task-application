@@ -76,3 +76,41 @@ export async function deleteTask(taskId: string) {
     throw error
   }
 }
+
+export async function updateTask(taskId: string, title: string) {
+  try {
+    const validated = CreateTaskSchema.parse({ title })
+    const supabase = await createClient()
+
+    const { data: userData, error: userError } = await supabase.auth.getUser()
+    if (userError || !userData?.user) {
+      throw new Error("Unauthorized")
+    }
+
+    // Ensure the task belongs to the user and is not completed before updating
+    const { data: existingTask, error: fetchError } = await supabase
+      .from("tasks")
+      .select("id, completed")
+      .eq("id", taskId)
+      .eq("user_id", userData.user.id)
+      .single()
+
+    if (fetchError) throw fetchError
+    if (existingTask?.completed) {
+      throw new Error("Cannot update a completed task")
+    }
+
+    const { error } = await supabase
+      .from("tasks")
+      .update({ title: validated.title })
+      .eq("id", taskId)
+      .eq("user_id", userData.user.id)
+
+    if (error) throw error
+
+    revalidatePath("/tasks")
+  } catch (error) {
+    console.error("[v0] Error updating task:", error)
+    throw error
+  }
+}

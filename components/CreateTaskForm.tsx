@@ -10,11 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Plus } from "lucide-react"
+import { useToast } from "@/components/ui/toast"
 
 export function CreateTaskForm() {
   const [title, setTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const { success: toastSuccess, error: toastError } = useToast()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,10 +31,12 @@ export function CreateTaskForm() {
       try {
         await createTask(title.trim())
         setTitle("")
+        toastSuccess("Task created", "Your task was added")
       } catch (error) {
         const message = error instanceof Error ? error.message : "Failed to create task"
         setError(message)
         console.error("[v0] Error creating task:", error)
+        toastError("Task create failed", message)
       }
     })
   }
@@ -64,3 +68,4 @@ export function CreateTaskForm() {
     </Card>
   )
 }
+

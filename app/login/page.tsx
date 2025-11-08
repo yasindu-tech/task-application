@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/ui/toast"
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -16,6 +17,8 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+
+  const { success: toastSuccess, error: toastError, info: toastInfo } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,24 +39,27 @@ export default function LoginPage() {
             emailRedirectTo: process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/tasks`,
           },
         })
-        if (error) throw error
+  if (error) throw error
 
-        setEmail("")
-        setPassword("")
-        setConfirmPassword("")
-        setError(null)
-        alert("Sign up successful! Please check your email to confirm your account.")
+  setEmail("")
+  setPassword("")
+  setConfirmPassword("")
+  setError(null)
+  toastSuccess("Account created", "Please check your email to confirm your account")
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
-        if (error) throw error
+  if (error) throw error
 
-        router.push("/tasks")
+  toastSuccess("Signed in", "Redirecting to tasks...")
+  router.push("/tasks")
       }
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred")
+      const msg = error instanceof Error ? error.message : "An error occurred"
+      setError(msg)
+      toastError("Authentication error", msg)
     } finally {
       setIsLoading(false)
     }
@@ -62,6 +68,7 @@ export default function LoginPage() {
   const handleLogout = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
+    toastInfo("Logged out")
     router.push("/login")
   }
 
