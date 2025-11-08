@@ -41,6 +41,36 @@ export default async function TasksPage() {
         </div>
 
         <div className="space-y-6">
+          {/* Dashboard summary cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Total tasks</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-semibold">{taskList.length}</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Completed</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-semibold">{taskList.filter((t) => t.completed).length}</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Remaining</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-semibold">{taskList.filter((t) => !t.completed).length}</p>
+              </CardContent>
+            </Card>
+          </div>
+
           <CreateTaskForm />
 
           <Card>
