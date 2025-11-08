@@ -1,5 +1,5 @@
 import * as server from "@/lib/supabase/server"
-import { POST } from "../todos/route"
+import { POST } from "../../app/api/todos/route"
 
 describe("/api/todos POST", () => {
   beforeAll(() => {
