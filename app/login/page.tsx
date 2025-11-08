@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/components/ui/toast"
+import Link from "next/link"
+import { ValidationError } from "@/lib/exceptions"
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -29,7 +31,7 @@ export default function LoginPage() {
     try {
       if (isSignUp) {
         if (password !== confirmPassword) {
-          throw new Error("Passwords do not match")
+          throw new ValidationError("Passwords do not match")
         }
 
         const { error } = await supabase.auth.signUp({
@@ -106,6 +108,13 @@ export default function LoginPage() {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                   disabled={isLoading}
                 />
+                {!isSignUp && (
+                  <div className="text-right text-sm mt-1">
+                    <Button asChild variant="ghost" size="sm">
+                      <Link href="/forgot">Forgot password?</Link>
+                    </Button>
+                  </div>
+                )}
               </div>
               {isSignUp && (
                 <div className="grid gap-2">
