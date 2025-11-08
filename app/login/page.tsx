@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -21,6 +21,30 @@ export default function LoginPage() {
   const router = useRouter()
 
   const { success: toastSuccess, error: toastError, info: toastInfo } = useToast()
+
+  // Ensure the Supabase client is instantiated on page load so it can
+  // detect and exchange any auth callback params present in the URL
+  // (e.g. PKCE / code exchanges or magic link / recovery flows).
+  useEffect(() => {
+    const supabase = createClient()
+
+    // Redirect to /tasks after a successful sign in that the client detects
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        router.push("/tasks")
+      }
+    })
+
+    return () => {
+      // unsubscribe if possible
+      try {
+        data.subscription.unsubscribe()
+      } catch (_) {
+        // ignore
+      }
+    }
+    // router is stable from next/navigation but include it to be explicit
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
