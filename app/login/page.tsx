@@ -22,9 +22,6 @@ export default function LoginPage() {
 
   const { success: toastSuccess, error: toastError, info: toastInfo } = useToast()
 
-  // Ensure the Supabase client is instantiated on page load so it can
-  // detect and exchange any auth callback params present in the URL
-  // (e.g. PKCE / code exchanges or magic link / recovery flows).
   useEffect(() => {
     const supabase = createClient()
 
@@ -36,14 +33,14 @@ export default function LoginPage() {
     })
 
     return () => {
-      // unsubscribe if possible
+      
       try {
         data.subscription.unsubscribe()
       } catch (_) {
         // ignore
       }
     }
-    // router is stable from next/navigation but include it to be explicit
+   
   }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
