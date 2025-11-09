@@ -5,18 +5,17 @@ import type React from "react"
 import { useState } from "react"
 import { createTask } from "@/app/tasks/actions"
 import { useTransition } from "react"
+import { useToast } from "@/components/ui/toast"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Plus } from "lucide-react"
-import { useToast } from "@/components/ui/toast"
 
 export function CreateTaskForm() {
   const [title, setTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
-  const { success: toastSuccess, error: toastError } = useToast()
+  const toast = useToast()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,41 +30,41 @@ export function CreateTaskForm() {
       try {
         await createTask(title.trim())
         setTitle("")
-        toastSuccess("Task created", "Your task was added")
+        toast.success("Task created", "Your task was added")
       } catch (error) {
         const message = error instanceof Error ? error.message : "Failed to create task"
         setError(message)
-        console.error("[v0] Error creating task:", error)
-        toastError("Task create failed", message)
+        toast.error("Create failed", message)
       }
     })
   }
 
   return (
-    <Card>
+    <Card className="border-primary/30 bg-card">
       <CardHeader>
-        <CardTitle>Add New Task</CardTitle>
+        <CardTitle className="text-lg">Add a new task</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="taskTitle">Task Description</Label>
-            <Input
-              id="taskTitle"
-              placeholder="Enter a new task..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              disabled={isPending}
-            />
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <Input
+                placeholder="What needs to be done?"
+                aria-label="Task Description"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                disabled={isPending}
+                className="bg-background"
+              />
+            </div>
+            <Button type="submit" disabled={isPending} className="px-6">
+              <Plus className="mr-2 h-4 w-4" />
+              {isPending ? "Adding..." : "Add Task"}
+            </Button>
           </div>
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          <Button type="submit" disabled={isPending} className="w-full sm:w-auto">
-            <Plus className="mr-2 h-4 w-4" />
-            {isPending ? "Adding..." : "Add Task"}
-          </Button>
+          {error && <p className="text-sm text-destructive">{error}</p>}
         </form>
       </CardContent>
     </Card>
   )
 }
-

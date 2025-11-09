@@ -29,7 +29,8 @@ export async function createTask(title: string) {
 
     revalidatePath("/tasks")
   } catch (error) {
-    console.error("[v0] Error creating task:", error)
+    const msg = error instanceof Error ? error.message : String(error)
+    console.error(`[v0] Error creating task: ${msg}`)
     throw error
   }
 }
@@ -53,7 +54,8 @@ export async function toggleTask(taskId: string, completed: boolean) {
 
     revalidatePath("/tasks")
   } catch (error) {
-    console.error("[v0] Error toggling task:", error)
+    const msg = error instanceof Error ? error.message : String(error)
+    console.error(`[v0] Error toggling task: ${msg}`)
     throw error
   }
 }
@@ -73,7 +75,8 @@ export async function deleteTask(taskId: string) {
 
     revalidatePath("/tasks")
   } catch (error) {
-    console.error("[v0] Error deleting task:", error)
+    const msg = error instanceof Error ? error.message : String(error)
+    console.error(`[v0] Error deleting task: ${msg}`)
     throw error
   }
 }
@@ -111,7 +114,8 @@ export async function updateTask(taskId: string, title: string) {
 
     revalidatePath("/tasks")
   } catch (error) {
-    console.error("[v0] Error updating task:", error)
+    const msg = error instanceof Error ? error.message : String(error)
+    console.error(`[v0] Error updating task: ${msg}`)
     throw error
   }
 }

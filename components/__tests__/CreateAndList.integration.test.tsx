@@ -12,9 +12,7 @@ jest.mock("@/components/ui/toast", () => ({
 jest.mock("@/app/tasks/actions", () => ({
   createTask: jest.fn((title: string) => {
     // Call back into the test harness to add the task to the in-test state
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - the test will set this global helper
-    if (globalThis.__TEST_ADD_TASK) {
+      if (globalThis.__TEST_ADD_TASK) {
       // allow the harness to synchronously add the task
       globalThis.__TEST_ADD_TASK(title)
     }
@@ -28,16 +26,13 @@ import type { Task } from "@/lib/types"
 
 declare global {
   // helper the mocked createTask will call during tests
-  // eslint-disable-next-line @typescript-eslint/ban-types
   var __TEST_ADD_TASK: ((title: string) => void) | undefined
 }
 
 describe("CreateTaskForm + TaskList integration", () => {
   afterEach(() => {
-    // clean up the test helper
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    delete globalThis.__TEST_ADD_TASK
+    // clean up the test helper by unsetting it
+    globalThis.__TEST_ADD_TASK = undefined
   })
 
   it("adds a new task and it appears in the list", async () => {
@@ -56,8 +51,6 @@ describe("CreateTaskForm + TaskList integration", () => {
       const [tasks, setTasks] = React.useState<Task[]>(initialTasks)
 
       // expose a helper that the mocked createTask calls
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       globalThis.__TEST_ADD_TASK = (title: string) => {
         const newTask: Task = {
           id: String(Date.now()),

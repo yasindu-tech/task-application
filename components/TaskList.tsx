@@ -13,8 +13,8 @@ export function TaskList({ tasks }: TaskListProps) {
   const [sortMode, setSortMode] = useState<"incomplete-first" | "complete-first">("incomplete-first")
 
   const sorted = useMemo(() => {
-    const copy = [...tasks]
-    // group by completed then sort by created_at desc within each group
+  const copy = [...tasks]
+  // Group by completed then sort by created_at desc within each group
     copy.sort((a, b) => {
       if (a.completed === b.completed) {
         // newer first
