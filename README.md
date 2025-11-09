@@ -8,6 +8,10 @@
 Task Application is a modern, web-based task management tool built with Next.js, React, and TypeScript.
 It provides a user-friendly interface for creating, organizing, and tracking tasks efficiently, helping you stay productive.
 
+## Demo Credentials
+*Email:demo@example.com
+*Password:SupaDemo123!
+
 ## ✨ Features
 
 * Create, update, and delete tasks
